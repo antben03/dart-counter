@@ -35,12 +35,6 @@ function pName(id) {
   return "Player " + (id + 1);
 }
 
-function ytId(u) {
-  if (!u) return null;
-  const m = String(u).match(/(?:youtu\.be\/|[?&]v=|shorts\/|embed\/)([\w-]{11})/);
-  return m ? m[1] : null;
-}
-
 /* ================= FORMAT ================= */
 function formatFor(n) {
   if (n <= 5) return { groups: 1, qual: n === 3 ? 2 : 4 };
@@ -56,7 +50,7 @@ function newMatch(p1, p2, stage, group, settings, extra = {}) {
   }, extra);
 }
 
-function createTournament(playerData, stageDefaults, bronze, music) {
+function createTournament(playerData, stageDefaults, bronze) {
   const n = playerData.length;
   const fmt = formatFor(n);
   const players = playerData.map((p, i) => ({ id: i, name: p.name.trim() }));
@@ -70,7 +64,6 @@ function createTournament(playerData, stageDefaults, bronze, music) {
     name: "Dart Tournament",
     players, groups, letters, format: fmt,
     stageDefaults: clone(stageDefaults), bronze,
-    music: clone(music),
     tiebreaks: [],
     matches: [], nextId: 0,
     playoffsStarted: false, champion: null, version: 3
@@ -340,7 +333,6 @@ function endTurn(m, wasBust) {
 }
 
 function winLeg(m, cur) {
-  playChase();
   const lv = m.live;
   lv.legsWon[cur]++;
   if (lv.legsWon[cur] >= needed(m.settings.legs)) {
@@ -438,25 +430,6 @@ function computeStats() {
     .sort((a, b) => b.mWins - a.mWins || b.avg - a.avg);
 }
 
-/* ================= MUSIC ================= */
-function playYT(url, start) {
-  const id = ytId(url);
-  if (!id) return false;
-  $("#musicframe").innerHTML =
-    `<iframe width="100%" height="180" src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&start=${Math.max(0, start | 0)}&rel=0" ` +
-    `frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
-  $("#musicbox").classList.remove("hidden");
-  return true;
-}
-function stopMusic() {
-  $("#musicframe").innerHTML = "";
-  $("#musicbox").classList.add("hidden");
-}
-function playChase() {
-  const mu = S.t ? S.t.music : S.singleMatch?.music;
-  if (mu && mu.enabled && ytId(mu.chaseUrl)) playYT(mu.chaseUrl, mu.chaseStart);
-}
-
 /* ================= EXPORT / IMPORT ================= */
 function exportJSON() {
   const blob = new Blob([JSON.stringify(S.t)], { type: "application/json" });
@@ -470,7 +443,6 @@ function migrate(t) {
   if (!t.letters) t.letters = Object.keys(t.groups);
   if (!t.format) t.format = { groups: t.letters.length, qual: 2 };
   if (!t.tiebreaks) t.tiebreaks = [];
-  if (!t.music) t.music = { enabled: false, chaseUrl: "", chaseStart: 40 };
   if (!t.stageDefaults) t.stageDefaults = { group: t.defaults, sf: t.defaults, bronze: t.defaults, final: t.defaults };
   return t;
 }
@@ -585,15 +557,6 @@ function vSetupMatch() {
     <div class="card"><h2>Format</h2>
       ${stageSettingsBlock("qm", "", def)}
     </div>
-    <div class="card"><h2>Chase the Sun 🎵</h2>
-      <label class="check"><input type="checkbox" id="qm-music-on"><span>Play after each won leg</span></label>
-      <div id="qm-music-fields" class="hidden">
-        <div class="field"><label>YouTube link</label>
-          <input id="qm-chase-url" placeholder="https://youtu.be/..."></div>
-        <div class="field"><label>Start at second</label>
-          <input id="qm-chase-start" type="number" min="0" value="40"></div>
-      </div>
-    </div>
     <button class="btn btn-red" id="qm-start-btn">🎯 Start Match</button>
     <div style="height:8px"></div>
     <button class="btn btn-ghost" id="qm-back-btn">← Back</button>
@@ -619,16 +582,6 @@ function vSetupTournament() {
       <div id="players">${rows}</div>
       <button class="btn btn-ghost" id="add-player">+ Add player</button>
       <p class="note">3–5 players → one group (top 4 to semi-finals) · 6+ → two groups, top 2 from each to semi-finals. Uneven groups play one fewer match.</p>
-    </div>
-    <div class="card"><h2>Chase the Sun 🎵</h2>
-      <label class="check"><input type="checkbox" id="music-on"><span>Play after each won leg</span></label>
-      <div id="music-fields" class="hidden">
-        <div class="field"><label>YouTube link</label>
-          <input id="chase-url" placeholder="https://youtu.be/..."></div>
-        <div class="field"><label>Start at second (set to the drop!)</label>
-          <input id="chase-start" type="number" min="0" value="40"></div>
-        <p class="note">Can be changed later under Tournament → Chase the Sun.</p>
-      </div>
     </div>
     <div class="card"><h2>Format per stage</h2>
       ${stageSettingsBlock("g", "Group Stage", { game: 501, out: "double", sets: 1, legs: 3 })}
@@ -764,17 +717,6 @@ function vTournament() {
     }
   }
   html += `</div>`;
-
-  const mu = t.music;
-  html += `<div class="card"><h2>Chase the Sun 🎵</h2>
-    <label class="check"><input type="checkbox" id="mu-on" ${mu.enabled ? "checked" : ""}>
-      <span>Play after each won leg</span></label>
-    <div class="field"><label>YouTube link</label>
-      <input id="mu-chase" value="${esc(mu.chaseUrl || "")}" placeholder="https://youtu.be/..."></div>
-    <div class="field"><label>Start at second</label>
-      <input id="mu-start" type="number" min="0" value="${mu.chaseStart | 0}"></div>
-    <button class="btn btn-sm" id="mu-save" style="width:100%">Save</button>
-  </div>`;
 
   html += `<div class="card"><h2>Save / Load</h2>
     <p class="note" style="margin:0 0 10px">Data only lives in memory – export before closing the browser!</p>
@@ -1018,24 +960,16 @@ function bind() {
   if (ihf) ihf.onchange = (e) => { if (e.target.files[0]) importJSON(e.target.files[0]); };
 
   // ---- QUICK MATCH SETUP ----
-  const qmMusic = $("#qm-music-on");
-  if (qmMusic) qmMusic.onchange = () => $("#qm-music-fields").classList.toggle("hidden", !qmMusic.checked);
-
   const qmStart = $("#qm-start-btn");
   if (qmStart) qmStart.onclick = () => {
     const p1 = $("#qm-p1").value.trim() || "Player 1";
     const p2 = $("#qm-p2").value.trim() || "Player 2";
     if (p1 === p2) { alert("Players cannot have the same name."); return; }
     const settings = readStageSettings("qm");
-    const music = {
-      enabled: $("#qm-music-on").checked,
-      chaseUrl: ($("#qm-chase-url")?.value || "").trim(),
-      chaseStart: parseInt($("#qm-chase-start")?.value) || 0
-    };
     S.t = null;
     S.singleMatch = {
       id: 0, stage: "single", group: null, p1: 0, p2: 1,
-      names: [p1, p2], settings, music,
+      names: [p1, p2], settings,
       status: "pending", winner: null, live: null, log: [], result: null
     };
     startMatchLive(S.singleMatch);
@@ -1106,13 +1040,8 @@ function bind() {
       group: readStageSettings("g"), sf: readStageSettings("s"),
       bronze: readStageSettings("b"), final: readStageSettings("f")
     };
-    const music = {
-      enabled: $("#music-on").checked,
-      chaseUrl: $("#chase-url").value.trim(),
-      chaseStart: parseInt($("#chase-start").value) || 0
-    };
     S.singleMatch = null;
-    createTournament(playerData, stageDefaults, $("#def-bronze").checked, music);
+    createTournament(playerData, stageDefaults, $("#def-bronze").checked);
     S.view = "tournament";
     render();
   };
@@ -1152,14 +1081,6 @@ function bind() {
 
   const pb = $("#playoff-btn");
   if (pb) pb.onclick = () => { startPlayoffs(); render(); };
-
-  const ms = $("#mu-save");
-  if (ms) ms.onclick = () => {
-    S.t.music.enabled = $("#mu-on").checked;
-    S.t.music.chaseUrl = $("#mu-chase").value.trim();
-    S.t.music.chaseStart = parseInt($("#mu-start").value) || 0;
-    render();
-  };
 
   // Admin actions
   document.querySelectorAll("[data-forfeit]").forEach(b => {
@@ -1229,10 +1150,6 @@ function bind() {
     const lb = document.querySelector("[data-leave]");
     if (lb) lb.onclick = () => { S.view = S.t ? "tournament" : "match-paused"; render(); };
   }
-
-  // Music close button is always in the DOM
-  const mc = $("#musicclose");
-  if (mc) mc.onclick = stopMusic;
 }
 
 render();
