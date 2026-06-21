@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;700;800&display=swap');
+
+:root{
+  --bg:#17130E; --panel:#231E16; --panel2:#2C261C; --line:#3A3326;
+  --cream:#EBDFC4; --cream-dim:#A89B7E;
+  --red:#C8362B; --red-deep:#9C2A21; --green:#2E7D4F; --brass:#C9A14C;
+  --radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--cream);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.45;padding-bottom:84px}
+h1,h2,h3{font-family:'Anton','Inter',sans-serif;letter-spacing:.04em;text-transform:uppercase;font-weight:400}
+button{font-family:inherit;cursor:pointer;border:none;border-radius:var(--radius);color:var(--cream)}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.4}
+input,select{font-family:inherit;font-size:16px;color:var(--cream);background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+input:focus,select:focus{outline:2px solid var(--brass);border-color:var(--brass)}
+.wrap{max-width:560px;margin:0 auto;padding:16px}
+
+.hero{text-align:center;padding:28px 8px 18px}
+.board{width:96px;height:96px;border-radius:50%;margin:0 auto 14px;
+  background:radial-gradient(circle at center,var(--red) 0 9%,var(--green) 9% 17%,var(--cream) 17% 30%,var(--red) 30% 38%,#1B1711 38% 62%,var(--cream) 62% 70%,var(--green) 70% 78%,#1B1711 78% 100%);
+  border:4px solid var(--brass);box-shadow:0 0 0 3px #0E0B07,0 8px 30px rgba(0,0,0,.6)}
+.hero h1{font-size:clamp(34px,9vw,52px);line-height:1.02}
+.hero h1 .accent{color:var(--red);display:block}
+.hero .sub{color:var(--brass);font-size:13px;letter-spacing:.22em;text-transform:uppercase;margin-top:8px;font-weight:700}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px}
+.card h2{font-size:18px;color:var(--brass);margin-bottom:12px}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--cream-dim);margin-bottom:5px}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.check{display:flex;align-items:center;gap:10px;padding:10px 0}
+.check input{width:22px;height:22px;accent-color:var(--red);flex:none}
+.check span{font-weight:600}
+
+.btn{padding:14px 18px;font-weight:800;font-size:16px;background:var(--panel2);border:1px solid var(--line);width:100%}
+.btn-red{background:var(--red);border-color:var(--red-deep);box-shadow:0 4px 0 var(--red-deep)}
+.btn-red:active{box-shadow:0 1px 0 var(--red-deep);transform:translateY(3px)}
+.btn-green{background:var(--green);border-color:#1F5A38}
+.btn-brass{background:var(--brass);color:#1B1711}
+.btn-ghost{background:transparent;border:1px dashed var(--line);color:var(--cream-dim)}
+.btn-sm{padding:8px 12px;font-size:13px;font-weight:700;width:auto}
+
+.prow{display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;flex-wrap:wrap}
+.prow .pname-in{flex:1;min-width:140px}
+.prow .px{flex:none;width:44px;height:44px;background:var(--panel2);border:1px solid var(--line);font-size:16px}
+.prow .wo-in{width:100%;font-size:14px;padding:8px 12px}
+#players.nomusic .wo-in{display:none}
+
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;background:#100D08;border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom))}
+.nav button{flex:1;background:none;border-radius:10px;padding:10px 4px;font-size:12px;font-weight:700;color:var(--cream-dim);display:flex;flex-direction:column;gap:2px;align-items:center}
+.nav button .ico{font-size:20px}
+.nav button.on{color:var(--cream);background:var(--panel)}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--cream-dim);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:8px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:center;font-variant-numeric:tabular-nums}
+.qual td{background:rgba(46,125,79,.12)}
+.qual td:first-child{box-shadow:inset 3px 0 0 var(--green)}
+.note{font-size:12px;color:var(--cream-dim);margin-top:8px}
+.warn{font-size:13px;color:var(--brass);font-weight:600;margin:8px 0}
+.badge{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;background:var(--brass);color:#1B1711;border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:middle}
+
+.mrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.mrow:last-child{border-bottom:none}
+.mrow .names{flex:1;font-weight:600;font-size:14px}
+.mrow .names .vs{color:var(--cream-dim);font-weight:400;margin:0 4px}
+.mrow .res{font-family:'Anton';font-size:18px;letter-spacing:.06em;color:var(--brass)}
+.stage-label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--cream-dim);font-weight:700;margin:14px 0 4px}
+
+.champ{text-align:center;background:linear-gradient(160deg,#2C2415,#231E16);border:1px solid var(--brass);border-radius:var(--radius);padding:18px;margin-bottom:14px}
+.champ .t{font-size:12px;letter-spacing:.2em;color:var(--brass);text-transform:uppercase;font-weight:800}
+.champ .n{font-family:'Anton';font-size:34px;margin-top:4px}
+
+.scorer{max-width:560px;margin:0 auto;padding:10px 12px 16px}
+.match-head{text-align:center;margin-bottom:8px}
+.match-head .fmt{font-size:11px;color:var(--cream-dim);text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.scoreboards{display:flex;gap:10px;margin:10px 0}
+.sb{flex:1;background:var(--panel);border:2px solid var(--line);border-radius:var(--radius);padding:12px 8px;text-align:center;position:relative;transition:border-color .15s}
+.sb.active{border-color:var(--red);background:#2A1C16}
+.sb .pname{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb .pscore{font-family:'Anton';font-size:54px;line-height:1.05;font-variant-numeric:tabular-nums}
+.sb .meta{font-size:12px;color:var(--cream-dim);font-weight:600}
+.sb .dbl{font-size:11px;color:var(--brass);font-weight:700}
+.sb .turnmark{position:absolute;top:8px;right:8px;width:10px;height:10px;border-radius:50%;background:var(--red);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.checkout{text-align:center;min-height:24px;margin:2px 0 8px;font-weight:700;font-size:15px;color:var(--brass)}
+.checkout span{background:rgba(201,161,76,.12);border:1px solid rgba(201,161,76,.4);border-radius:8px;padding:3px 10px}
+.darts{display:flex;justify-content:center;gap:8px;margin-bottom:10px}
+.dart-slot{min-width:64px;height:40px;background:var(--panel2);border:1px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;font-variant-numeric:tabular-nums}
+.dart-slot.filled{border-style:solid;border-color:var(--brass)}
+.mults{display:flex;gap:8px;margin-bottom:8px}
+.mults button{flex:1;padding:12px 0;font-weight:800;font-size:15px;background:var(--panel2);border:1px solid var(--line)}
+.mults button.on{background:var(--brass);color:#1B1711;border-color:var(--brass)}
+.numpad{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.numpad button{padding:14px 0;font-size:18px;font-weight:800;background:var(--panel);border:1px solid var(--line);font-variant-numeric:tabular-nums}
+.numpad button.special{background:var(--panel2);font-size:14px}
+.numpad button.miss{color:var(--cream-dim)}
+
+.flash{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(11,8,5,.82);animation:fadeflash 1.4s forwards;pointer-events:none}
+.flash .big{font-family:'Anton';font-size:120px;color:var(--red);text-shadow:0 0 40px rgba(200,54,43,.8)}
+.flash .lbl{position:absolute;margin-top:150px;font-weight:800;letter-spacing:.3em;color:var(--brass);text-transform:uppercase}
+@keyframes fadeflash{0%{opacity:0}12%{opacity:1}80%{opacity:1}100%{opacity:0}}
+
+.musicbox{position:fixed;left:8px;right:8px;bottom:78px;z-index:90;background:#100D08;border:1px solid var(--brass);border-radius:var(--radius);padding:8px;box-shadow:0 8px 30px rgba(0,0,0,.7)}
+.musicbox iframe{border-radius:8px;display:block}
+.musicbox .mclose{width:100%;margin-top:6px;padding:8px;font-weight:800;font-size:13px;background:var(--panel2);border:1px solid var(--line)}
+
+.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.scrollx table{min-width:520px}
+.hidden{display:none}
+.small-title{font-size:22px;text-align:center;margin:6px 0 14px}
+.small-title .accent{color:var(--red)}
+
+/* Home mode cards */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.mode-card{background:var(--panel);border:2px solid var(--line);border-radius:var(--radius);padding:22px 12px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;transition:border-color .15s,background .15s;width:100%}
+.mode-card:hover{border-color:var(--brass)}
+.mode-card:active{background:var(--panel2);border-color:var(--brass);transform:scale(.97)}
+.mode-icon{font-size:38px}
+.mode-title{font-family:'Anton','Inter',sans-serif;font-size:19px;letter-spacing:.04em;text-transform:uppercase}
+.mode-desc{font-size:12px;color:var(--cream-dim);line-height:1.4}
+
+/* Tournament header with admin toggle */
+.tour-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.tour-header .small-title{margin:0}
+
+/* Admin panel */
+.admin-panel{border-color:var(--brass) !important}
+.admin-actions{padding:4px 0 8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.admin-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--cream-dim);white-space:nowrap}
+.mrow-wrap .mrow{border-bottom:none}
+.mrow-wrap{border-bottom:1px solid var(--line)}
+.mrow-wrap:last-child{border-bottom:none}
+
+/* Match result & paused screens */
+.result-card{background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--brass);border-radius:var(--radius);padding:28px 16px;text-align:center;margin-bottom:16px}
+.result-label{font-size:11px;letter-spacing:.2em;color:var(--brass);text-transform:uppercase;font-weight:800;margin-bottom:6px}
+.result-winner{font-family:'Anton',sans-serif;font-size:42px;line-height:1.1;margin:4px 0 8px}
+.result-players{font-family:'Anton',sans-serif;font-size:20px;line-height:1.2;margin:4px 0 8px}
+.result-score{font-family:'Anton',sans-serif;font-size:30px;color:var(--brass);margin:4px 0 8px}
+.result-loser{font-size:14px;color:var(--cream-dim)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
