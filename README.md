@@ -11,7 +11,6 @@ A browser-based dart scorer and tournament manager. No install, no server, no de
 - **Undo** – step back dart by dart
 - **Tiebreaks** – sudden-death leg when the group table is level
 - **Admin mode** – edit player names, forfeit matches, and reset results mid-tournament
-- **Chase the Sun** – plays a YouTube clip after each won leg
 - **Export / Import** – save and restore tournaments as JSON
 
 ## Running locally
